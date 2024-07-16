@@ -23,14 +23,14 @@ namespace Store_Musfer_Wep.Areas.Customer.Controllers
         public IActionResult Index()
         {
 
-            IEnumerable<Product> prducts = _UnitOfWork.product.GetAll(includeProperties: "category");
+            IEnumerable<Product> prducts = _UnitOfWork.product.GetAll(includeProperties: "category,productImages");
             return View(prducts);
         }
         public IActionResult Details(int ProductId)
         {
             ShoppingCard Card = new()
             {
-                product = _UnitOfWork.product.Get(pro => pro.Id == ProductId, includeProperties: "category"),
+                product = _UnitOfWork.product.Get(pro => pro.Id == ProductId, includeProperties: "category,productImages"),
                 Count = 1,
                 ProductId=ProductId
             };

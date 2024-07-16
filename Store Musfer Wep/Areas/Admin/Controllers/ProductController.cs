@@ -48,7 +48,7 @@ namespace Store_Musfer_Wep.Areas.Admin.Controllers
             else
             {
                 //Update
-                productVM.product= _UnitOfWork.product.Get(pro => pro.Id == id);
+                productVM.product= _UnitOfWork.product.Get(pro => pro.Id == id,includeProperties: "productImages");
                 return View(productVM);
             }
 
@@ -60,29 +60,10 @@ namespace Store_Musfer_Wep.Areas.Admin.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(ProductVM productVM ,IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM , List<IFormFile> files)
         {
             if (ModelState.IsValid) {
-                string wwwrootWep = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
-                   
-                    string fileName = Guid.NewGuid().ToString()+Path.GetExtension(file.FileName);
-                    string ProductPath = Path.Combine(wwwrootWep, @"images\product");
-                    if (!string.IsNullOrEmpty(productVM.product.ImageUrl))
-                    {
-                        var oldImagPath = Path.Combine(wwwrootWep, productVM.product.ImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagPath))
-                        {
-                            System.IO.File.Delete(oldImagPath);
-                        }
-                    }
-                    using (var fileStream = new FileStream(Path.Combine(ProductPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                    productVM.product.ImageUrl = @"\images\product\"+fileName;
-                }
+
                 if (productVM.product.Id == 0)
                 {
                     _UnitOfWork.product.Add(productVM.product);
@@ -91,9 +72,47 @@ namespace Store_Musfer_Wep.Areas.Admin.Controllers
                 {
                     _UnitOfWork.product.update(productVM.product);
                 }
-                
                 _UnitOfWork.Save();
-                TempData["success"] = "Product  Created Successfuly";
+                string wwwrootWep = _webHostEnvironment.WebRootPath;
+                
+                if (files != null)
+                 {
+                    foreach(IFormFile file in files)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string prductPath = @"images\products\product-"+productVM.product.Id;
+                        string finelPath = Path.Combine(wwwrootWep, prductPath);
+
+                        if (!System.IO.Directory.Exists(finelPath))
+                        {
+                            System.IO.Directory.CreateDirectory(finelPath);
+                        }
+                        using (var fileStream = new FileStream(Path.Combine(finelPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        ProductImage productImage = new ProductImage()
+                        {
+                            ImageUrl = @"\" + prductPath + @"\" + fileName,
+                            ProductId = productVM.product.Id
+                        };
+                        if (productVM.product.productImages == null)
+                        {
+                            productVM.product.productImages = new List<ProductImage>();
+                        }
+
+                        productVM.product.productImages.Add(productImage);
+                    }
+                    _UnitOfWork.product.update(productVM.product);
+                    _UnitOfWork.Save();
+
+
+                 }
+
+
+
+                TempData["success"] = "Product  Created/Update Successfuly";
                 return RedirectToAction("Index");
             }
             else
@@ -113,10 +132,32 @@ namespace Store_Musfer_Wep.Areas.Admin.Controllers
                 
           
         }
-        
+        public IActionResult DeletImage(int ImageId)
+        {
+            var image = _UnitOfWork.productImage.Get(im => im.Id == ImageId);
+            var productId = image.ProductId;
+            if (image != null)
+            {
+                string wwwrootWep = _webHostEnvironment.WebRootPath;
+                string finelPath = Path.Combine(wwwrootWep, image.ImageUrl.Substring(1));
 
-           
-    
+                if (System.IO.File.Exists(finelPath))
+                {
+                    System.IO.File.Delete(finelPath);
+                }
+
+                _UnitOfWork.productImage.Remove(image);
+                _UnitOfWork.Save();
+                TempData["success"] = "Delete Successfuly";
+               
+            }
+            return RedirectToAction(nameof(Upsert), new { id = productId });
+
+        }
+
+
+
+
 
         #region Api Calls
         [HttpGet]  
@@ -135,12 +176,18 @@ namespace Store_Musfer_Wep.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Erorr while deleting " });
 
             }
+            string finelPath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\products\product-"+id);
 
-            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, ProductToBeDeleted.ImageUrl.TrimStart('\\'));
-            if (System.IO.File.Exists(oldImagePath))
+            if (System.IO.Directory.Exists(finelPath))
             {
-                System.IO.File.Delete(oldImagePath);
+                string[] filePathes = Directory.GetFiles(finelPath);
+                foreach(var filePath in filePathes)
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                System.IO.Directory.Delete(finelPath);
             }
+
             _UnitOfWork.product.Remove(ProductToBeDeleted);
             _UnitOfWork.Save();
             return Json(new {success =true , message= "Product Deleted Successfuly" });

@@ -31,8 +31,10 @@ namespace Store_Musfer_Wep.Areas.Customer.Controllers
                 ShoppingCardList = _unitOfWork.shoppingCard.GetAll(sh => sh.ApplicationUserId == UserId, includeProperties: "product"),
                 orderHeader=new()
             };
+            var productImages = _unitOfWork.productImage;
             foreach(var cart in ShoppingCartVM.ShoppingCardList)
             {
+                cart.product.productImages = productImages.GetAll(im => im.ProductId == cart.product.Id).ToList();
                 cart.Price = GetPriceBasedOnQuintity(cart);
                 ShoppingCartVM.orderHeader.OrderTotal += (cart.Price*cart.Count);
 

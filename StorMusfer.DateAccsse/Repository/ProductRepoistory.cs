@@ -28,10 +28,8 @@ namespace StoreMusfer.DateAccsse.Repository
                 product.ListPrice = obj.ListPrice;
                 product.Price100 = obj.Price100;
                 product.Price50 = obj.Price50;
-                if (obj.ImageUrl != null)
-                {
-                    product.ImageUrl = obj.ImageUrl;
-                }
+                product.productImages = obj.productImages;
+              
             }
             
         }

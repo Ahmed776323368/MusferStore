@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace StoreMusfer.DateAccsse.Repository.IRepository
 {
-    public interface IApplicationUserRepository :IRepository<ApplicationUser>
+    public interface IProductImageRepository :IRepository<ProductImage>
     {
-
-        void update(ApplicationUser obj);
+        void update(ProductImage obj);
+       
     }
 }

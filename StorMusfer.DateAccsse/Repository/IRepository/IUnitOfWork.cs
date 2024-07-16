@@ -15,6 +15,7 @@ namespace StoreMusfer.DateAccsse.Repository.IRepository
         IApplicationUserRepository ApplicationUser{ get; }
         IOrderHeaderRepository OrderHeader { get; }
         IOrderDetailRepository OrderDetail{ get; }
+        IProductImageRepository productImage { get; }
 
         void Save();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -31,9 +32,13 @@ namespace StoreMusfer.Models
         [Range(1, 1000)]
         public double Price100 { get; set; }
         public int CategoryId { get; set; }
-        public string? ImageUrl { get; set; }
+       // public string? ImageUrl { get; set; }
         [ForeignKey("CategoryId")]
         public Category? category { get; set; }
+        [ValidateNever]
+        public List<ProductImage> productImages { get; set; }
+
+
 
 
 

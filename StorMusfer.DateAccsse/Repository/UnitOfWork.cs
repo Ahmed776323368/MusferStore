@@ -21,6 +21,8 @@ namespace StoreMusfer.DateAccsse.Repository
             ApplicationUser = new ApplicationUserRepository(_db);
             OrderDetail= new OrderDetailRepository(_db);
             OrderHeader = new OrderHeaderRepository(_db);
+            productImage = new ProductImageRepository(_db);
+
         }
         public ICategoryRepository category { get; private set; }
         public IProductRepository product { get; private set; }
@@ -29,6 +31,7 @@ namespace StoreMusfer.DateAccsse.Repository
         public IApplicationUserRepository ApplicationUser { get; private set; }
         public IOrderHeaderRepository OrderHeader { get; private set; }
         public IOrderDetailRepository OrderDetail { get; private set; }
+        public IProductImageRepository productImage { get; private set; }
 
         public void Save()
         {

@@ -73,8 +73,7 @@ namespace StoreMusfer.DateAccsse.Date
                     Price=27,
                     Price100=20,
                     Price50=25,
-                    CategoryId = 1,
-                    ImageUrl = "d"
+                    CategoryId = 1
 
                 },
                 new Product
@@ -88,8 +87,7 @@ namespace StoreMusfer.DateAccsse.Date
                       Price = 27,
                       Price100 = 20,
                       Price50 = 25,
-                      CategoryId=1,
-                      ImageUrl="d"
+                      CategoryId=1
                  },
                   new Product
                   {
@@ -102,8 +100,7 @@ namespace StoreMusfer.DateAccsse.Date
                       Price = 27,
                       Price100 = 20,
                       Price50 = 25,
-                      CategoryId = 2,
-                      ImageUrl = "d"
+                      CategoryId = 2
                   },
                     new Product
                     {
@@ -116,8 +113,7 @@ namespace StoreMusfer.DateAccsse.Date
                         Price = 27,
                         Price100 = 20,
                         Price50 = 25,
-                        CategoryId = 3,
-                        ImageUrl = "d"
+                        CategoryId = 3
                     }
 
 
@@ -131,6 +127,7 @@ namespace StoreMusfer.DateAccsse.Date
         public DbSet<ShoppingCard> ShoppingCards { get; set; }
         public DbSet<OrderHeader> orderHeaders { get; set; }
         public DbSet<OrderDetail> orderDetails { get; set; }
+        public DbSet<ProductImage> productImages { get; set; }
 
 
 

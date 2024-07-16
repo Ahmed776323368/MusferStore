@@ -1,0 +1,102 @@
+﻿@model UserVM
+<div class="card shadow border-0 my-4">
+
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+
+                <h2 class="text-white py-2">    Manage Role</h2>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card-body p-4">
+
+        <form method="post" class="row" asp-action="RoleManagment" >
+            <div asp-validation-summary="All">
+                  
+            </div>
+            <input asp-for="user.Id" type="hidden" />
+           
+            <div class="row">
+                <div class="col-12">
+                    <div class="border p-3 ">
+
+                        <div class=" form-floating py-2 col-12  ">
+                            <input readonly class="form-control border-0 shadow" asp-for=" user.Name" />
+                            <label class="ms-2 " asp-for=" user.Name"></label>
+                            <span asp-validation-for=" user.Name" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <select onchange="ChangeRole()" id="Role" class="form-select  border-0 shadow" asp-for="user.Role" asp-items="@Model.roleList">
+                               
+                            </select>
+                            <label class="ms-2 " asp-for="user.Role"></label>
+                            <span asp-validation-for="user.Role" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12" id="Company">
+                            <select  class="form-select  border-0 shadow" asp-for="user.CompanyId" asp-items="@Model.companyList">
+                            </select>
+                            <label class="ms-2 " asp-for="user.CompanyId"></label>
+                            <span asp-validation-for="user.CompanyId" class="text-danger"></span>
+                        </div>
+                       
+                        
+                        <div class="row pt-2 mt-2">
+                            <div class="col-6 col-md-3">
+                                    <input type="submit" class="form-control btn btn-primary" value="Update" />
+                                
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <a asp-action="Index" class="btn btn-outline-primary border form-control">Back to list</a>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+          
+
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+</div>
+@section Scripts{
+  
+    <script>
+      
+        var role = document.getElementById("Role");
+        var company = document.getElementById("Company");
+        
+         function ChangeRole () {
+            var roleSelected = role.options[role.selectedIndex].text;
+            if (roleSelected=="@SD.Role_Company") {
+                console.log(roleSelected);
+                company.style = "display:block;";
+            }
+            else {
+                company.style = "display:none;";
+            }
+
+        }
+        ChangeRole();
+    </script>
+
+
+
+
+}
+
+

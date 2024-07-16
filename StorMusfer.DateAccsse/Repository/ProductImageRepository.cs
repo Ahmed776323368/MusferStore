@@ -9,21 +9,20 @@ using System.Threading.Tasks;
 
 namespace StoreMusfer.DateAccsse.Repository
 {
-    public class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
+    public class ProductImageRepository : Repository<ProductImage>, IProductImageRepository
     {
         private readonly ApplicationDbContext _db;
-        public ApplicationUserRepository(ApplicationDbContext db):base(db)
+        public ProductImageRepository(ApplicationDbContext db):base(db)
         {
             _db = db;
         }
 
-      public  void update(ApplicationUser obj)
+
+        
+
+        public void update(ProductImage obj)
         {
-
-            _db.ApplicationUsers.Update(obj);
+            _db.productImages.Update(obj);
         }
-
-
-
     }
 }

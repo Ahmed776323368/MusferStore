@@ -16,7 +16,7 @@
 
         <form method="post" class="row" asp-action="Upsert" enctype="multipart/form-data">
             <input asp-for="product.Id" type="hidden" />
-            <input asp-for="product.ImageUrl" type="hidden" />
+           
             <div class="row">
                 <div class="col-10">
                     <div class="border p-3 ">
@@ -67,9 +67,9 @@
                             <span asp-validation-for=" product.CategoryId" class="text-danger"></span>
                         </div>
                         <div class="form-floating py-2 col-12">
-                            <input class="form-control border-0 shadow" type="file" name="file" />
-                            <label class="ms-2 " asp-for=" product.ImageUrl"></label>
-                            <span asp-validation-for=" product.ImageUrl" class="text-danger"></span>
+                            <input class="form-control border-0 shadow" type="file" name="files" multiple name="file" />
+                            <label class="ms-2 " asp-for=" product.productImages"></label>
+                            <span asp-validation-for="  product.productImages" class="text-danger"></span>
                         </div>
                         <div class=" py-2 col-12">
                             <label class="ms-2  text-muted"  asp-for=" product.Description"></label>
@@ -102,8 +102,18 @@
 
                 </div>
                 <div class="col-2">
-                      
-                    <img src="@Model.product.ImageUrl" style="width:100% ;border-radius:5px ; border:1px solid #bbb9b9" />
+                    @if (Model.product.productImages != null)
+                    {
+                        foreach (var image in Model.product.productImages){
+                           <div>
+                                <img src="@image.ImageUrl" style="width:100% ;border-radius:5px ; border:1px solid #bbb9b9" />
+                                <a asp-action="DeletImage" class="btn btn-danger" asp-route-ImageId="@image.Id">
+                                    <i class="bi bi-trash-fill"></i>   Delete
+                                </a>
+                           </div>
+                        }
+                    }
+                    
 
 
                 </div>
@@ -123,30 +133,18 @@
 @section Scripts{
 
     <script>
-        
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'anchor autolink charmap codesample emoticons  searchreplace table  wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
-            toolbar: ' undo redo | bold italic underline strikethrough |  table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap ',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [
-                { value: 'First.Name', title: 'First Name' },
-                { value: 'Email', title: 'Email' },
-            ],
-            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-        });
-       /* <script>
-            tinymce.init({
-                selector: 'textarea',
-                plugins: 'lists,media,table,paste,wordprocessor',
-                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | code',
-            });*/
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    });
     </script>
-    </script>
-    <partial name="_ValidationScriptsPartial"></partial>
 
-}
+
+
+        <partial name="_ValidationScriptsPartial" > </partial>
+
+    }
 
 
 
